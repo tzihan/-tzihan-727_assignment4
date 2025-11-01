@@ -118,7 +118,19 @@ Lets switch to writing queries from within R via the `DBI` package. Create a que
 Execute the query.
 
 ```{r}
+query <- 
+" SELECT primary_type,
+         COUNT(*) AS arrest_count
+  FROM `bigquery-public-data.chicago_crime.crime`
+  WHERE year = 2016 
+    AND district = 11 
+    AND arrest = TRUE
+  GROUP BY primary_type
+  ORDER BY arrest_count DESC
+"
+results <- dbGetQuery(con, query)
 
+head(results, 10)
 ```
 
 Try to write the very same query, now using the `dbplyr` package. For this, you need to first map the `crime` table to a tibble object in R.
